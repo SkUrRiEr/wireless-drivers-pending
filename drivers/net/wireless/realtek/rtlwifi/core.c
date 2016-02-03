@@ -53,18 +53,26 @@ EXPORT_SYMBOL(channel5g_80m);
 
 void rtl_addr_delay(u32 addr)
 {
-	if (addr == 0xfe)
+	switch (addr) {
+	case 0xfe:
 		msleep(50);
-	else if (addr == 0xfd)
+		break;
+	case 0xfd:
 		msleep(5);
-	else if (addr == 0xfc)
+		break;
+	case 0xfc:
 		msleep(1);
-	else if (addr == 0xfb)
+		break;
+	case 0xfb:
 		usleep_range(50, 100);
-	else if (addr == 0xfa)
+		break;
+	case 0xfa:
 		usleep_range(5, 10);
-	else if (addr == 0xf9)
+		break;
+	case 0xf9:
 		usleep_range(1, 2);
+		break;
+	}
 }
 EXPORT_SYMBOL(rtl_addr_delay);
 
