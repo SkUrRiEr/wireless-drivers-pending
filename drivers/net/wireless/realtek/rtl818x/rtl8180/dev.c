@@ -1774,7 +1774,7 @@ static int rtl8180_probe(struct pci_dev *pdev,
 	}
 
 	if ((err = pci_set_dma_mask(pdev, DMA_BIT_MASK(32))) ||
-	    (err = pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(32)))) {
+	    (err = pci_set_consistent_dma_mask(pdev, 0xFFFFFF00ULL))) {
 		printk(KERN_ERR "%s (rtl8180): No suitable DMA available\n",
 		       pci_name(pdev));
 		goto err_free_reg;
