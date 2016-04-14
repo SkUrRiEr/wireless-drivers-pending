@@ -1007,6 +1007,14 @@ static int rtl8180_init_rx_ring(struct ieee80211_hw *dev)
 	priv->rx_ring = pci_zalloc_consistent(priv->pdev, priv->rx_ring_sz * 32,
 					      &priv->rx_ring_dma);
 	if (!priv->rx_ring || (unsigned long)priv->rx_ring & 0xFF) {
+		/* This hardware cannot handle ring buffer addresses which do
+		 * not match 0x......00 and will probably do bad things if it's
+		 * given them like overwriting adjacent memory.
+		 */
+		if (WARN(priv->rx_ring, "This hardware cannot use ring addresses with non-zero least significant bytes."))
+			pci_free_consistent(priv->pdev, priv->rx_ring_sz * 32,
+					    priv->rx_ring, priv->rx_ring_dma);
+
 		wiphy_err(dev->wiphy, "Cannot allocate RX ring\n");
 		return -ENOMEM;
 	}
